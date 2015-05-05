@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MailTableViewController.h
 //  tookIt
 //
 //  Created by 石井嗣 on 2015/05/05.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface MainTableViewController : UITableViewController
 
 @end
-
