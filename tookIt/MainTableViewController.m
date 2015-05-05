@@ -86,10 +86,10 @@
     
     //Arrayの中にDictionary情報を格納する
     cellArray = [mydefault objectForKey:@"CELLS"];
-    NSLog(@"cellArray=%@",[cellArray description]);
-    NSLog(@"cellDictionary=%@",[cellDictionary description]);
+//    NSLog(@"cellArray=%@",[cellArray description]);
+//    NSLog(@"cellDictionary=%@",[cellDictionary description]);
     //今あるものを消してまた入れると次でなぜか止まる
-    [cellArray addObject:cellDictionary];
+//    [cellArray addObject:cellDictionary];
     
     if (cellArray==nil) {
         titleString = @"add";
@@ -98,20 +98,20 @@
 //        [cellDictionary setValue:titleString forKey:@"TITLE"];
 //        [cellDictionary setValue:urlString forKey:@"URL"];
 //        [cellDictionary setValue:wordString forKey:@"SEARCHWORD"];
-        NSLog(@"情報無し");
+//        NSLog(@"情報無し");
         [dataSource addObject:titleString];
     }else{
-        for (int i=0; i<[cellArray count]-1; i++) {
-            NSLog(@"count=%d",[cellArray count]);
+//        NSLog(@"count=%d",[cellArray count]);
+        for (int i=0; i<[cellArray count]; i++) {
             cellDictionary = [cellArray objectAtIndex:i];
             titleString = [cellDictionary objectForKey:@"TITLE"];
-            NSLog(@"TITLE=%@",titleString);
+//            NSLog(@"TITLE=%@",titleString);
             [dataSource addObject:titleString];
         }
         [dataSource addObject:@"add"];
     }
 
-    NSLog(@"datasource=%d",[dataSource count]);
+//    NSLog(@"datasource=%d",[dataSource count]);
 }
 
 
@@ -196,9 +196,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"「%@」が選択されました", [dataSource objectAtIndex:indexPath.row]);
+//    NSLog(@"「%@」が選択されました", [dataSource objectAtIndex:indexPath.row]);
     cellNumber = indexPath.row;
-    NSLog(@"cellNumber=%d",cellNumber);
+//    NSLog(@"cellNumber=%d",cellNumber);
     NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
     [mydefault setInteger:cellNumber forKey:@"NUMBER"];
     [mydefault synchronize];

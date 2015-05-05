@@ -49,9 +49,16 @@
 
 -(void)setLabelURL{
     
+    [self loadUserDefault];
+    
     //URL入力
     textfieldURL = [[UITextField alloc]initWithFrame:CGRectMake(20,20,self.view.bounds.size.width-40,20)];
-    textfieldURL.text = @"http://";
+    if (!(urlString==nil)) {
+        textfieldURL.text = urlString;
+//        NSLog(@"urlString=%@",urlString);
+    }else{
+        textfieldURL.text = @"http://";
+    }
     textfieldURL.font = [UIFont fontWithName:@"HiraKakuProN-W3" size:15];
     textfieldURL.returnKeyType = UIReturnKeyDefault;
     textfieldURL.keyboardType = UIKeyboardTypeURL;
@@ -79,11 +86,35 @@
     [self.view addSubview:cancelButton];
 }
 
+-(void)loadUserDefault{
+    
+    cellArray = [[NSMutableArray alloc]init];
+    cellDictionary = [[NSMutableDictionary alloc]init];
+    NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
+    cellNumber = [mydefault integerForKey:@"NUMBER"];
+//    NSLog(@"(url)cellNumber=%d",cellNumber);
+    cellArray = [mydefault objectForKey:@"CELLS"];
+//    NSLog(@"(url)cellArray最初読み込み=%@",[cellArray description]);
+    //ここの入力が終わった後に、tableViewのdidSelect1メソッドが呼ばれるため、cellNumberが一つ前になる
+    if (!(cellArray==nil)) {
+        cellDictionary = [cellArray objectAtIndex:cellNumber];
+        urlString = [cellDictionary objectForKey:@"URL"];
+        wordString = [cellDictionary objectForKey:@"SEARCHWORD"];
+    }
+}
+
+
+
 -(void)setLabelWord{
     
     //検索ワード入力
     textfieldWord = [[UITextField alloc]initWithFrame:CGRectMake(20,50,self.view.bounds.size.width-40,20)];
-    textfieldWord.placeholder = NSLocalizedString(@"search word", nil);
+    if (!(wordString==nil)) {
+        textfieldWord.text = wordString;
+//        NSLog(@"wordString=%@",wordString);
+    }else{
+        textfieldWord.placeholder = NSLocalizedString(@"search word", nil);
+    }
     textfieldURL.font = [UIFont fontWithName:@"HiraKakuProN-W3" size:15];
     textfieldWord.returnKeyType = UIReturnKeyDefault;
     textfieldURL.keyboardType = UIKeyboardTypeDefault;
@@ -190,25 +221,27 @@
 
 //保存してページを戻る
 - (void)buttonDone{
-    [self performSegueWithIdentifier:@"viewToTableView" sender:self];
+    
     wordString = textfieldWord.text;
     //検索
     //    [self searchWord:textfieldWord.text];
-    
-    cellArray = [[NSMutableArray alloc]init];
     cellDictionary = [[NSMutableDictionary alloc]init];
     [cellDictionary setValue:titleString forKey:@"TITLE"];
     [cellDictionary setValue:urlString forKey:@"URL"];
     [cellDictionary setValue:wordString forKey:@"SEARCHWORD"];
+//    NSLog(@"始めcellDictionary=%@",[cellDictionary description]);
     
     NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
-    cellNumber = [mydefault integerForKey:@"NUMBER"];
-    NSLog(@"(url)cellNumber=%d",cellNumber);
+    if (![cellArray isEqual:nil]) {
+        cellArray = [[NSMutableArray alloc]init];
+    }
     [cellArray insertObject:cellDictionary atIndex:cellNumber];
     [mydefault setObject:cellArray forKey:@"CELLS"];
     [mydefault synchronize];
     
-    NSLog(@"始めtitleString=%@, urlString=%@, wordString=%@",titleString,urlString,wordString);
+//    NSLog(@"始めcellArray=%@",[cellArray description]);
+    
+    [self performSegueWithIdentifier:@"viewToTableView" sender:self];
     
 }
 
