@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 YuZ. All rights reserved.
 //
 
+#import "MainTableViewController.h"
 #import <UIKit/UIKit.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

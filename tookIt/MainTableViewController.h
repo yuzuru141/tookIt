@@ -1,5 +1,5 @@
 //
-//  MailTableViewController.h
+//  MainTableViewController.h
 //  tookIt
 //
 //  Created by 石井嗣 on 2015/05/05.
@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MainTableViewController : UITableViewController
+@interface MainTableViewController : UITableViewController<NSURLSessionDataDelegate>
+
+-(void)connectionURL;
 
 @end

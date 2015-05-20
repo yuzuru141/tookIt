@@ -68,7 +68,7 @@
     [textfieldURL becomeFirstResponder];
     [self.view addSubview:textfieldURL];
     
-    //ボタン
+    //ボタン キャンセルボタンとオールクリアボタンに分ける
     doneButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     doneButton.frame = CGRectMake(0,self.view.bounds.size.height-70,self.view.bounds.size.width,30);
     [doneButton setTitle:@"set" forState:UIControlStateNormal];
@@ -95,11 +95,14 @@
 //    NSLog(@"(url)cellNumber=%d",cellNumber);
     cellArray = [mydefault objectForKey:@"CELLS"];
 //    NSLog(@"(url)cellArray最初読み込み=%@",[cellArray description]);
+//    NSLog(@"(url)cellarray count=%d",[cellArray count]);
     //ここの入力が終わった後に、tableViewのdidSelect1メソッドが呼ばれるため、cellNumberが一つ前になる
     if (!(cellArray==nil)) {
-        cellDictionary = [cellArray objectAtIndex:cellNumber];
-        urlString = [cellDictionary objectForKey:@"URL"];
-        wordString = [cellDictionary objectForKey:@"SEARCHWORD"];
+        if ([cellArray count]>cellNumber) {
+            cellDictionary = [cellArray objectAtIndex:cellNumber];
+            urlString = [cellDictionary objectForKey:@"URL"];
+            wordString = [cellDictionary objectForKey:@"SEARCHWORD"];
+        }
     }
 }
 
@@ -183,17 +186,6 @@
 }
 
 
--(void)searchWord:(NSString*)WORD{
-    
-    NSRange range = [WORD rangeOfString:WORD];
-    if (range.location != NSNotFound) {
-        NSLog(@"発見");
-    } else {
-        NSLog(@"ない");
-    }
-    textfieldWord.tag = 1;
-}
-
 
 //読み込み失敗時に呼ばれる関数
 - (void)alertViewMethod{
@@ -225,21 +217,27 @@
     wordString = textfieldWord.text;
     //検索
     //    [self searchWord:textfieldWord.text];
-    cellDictionary = [[NSMutableDictionary alloc]init];
+    //cellDictionary = [[NSMutableDictionary alloc]init];
     [cellDictionary setValue:titleString forKey:@"TITLE"];
     [cellDictionary setValue:urlString forKey:@"URL"];
     [cellDictionary setValue:wordString forKey:@"SEARCHWORD"];
 //    NSLog(@"始めcellDictionary=%@",[cellDictionary description]);
     
     NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
-    if (![cellArray isEqual:nil]) {
+    cellArray = [mydefault objectForKey:@"CELLS"];
+//    NSLog(@"始めcellArray=%@",[cellArray description]);
+    if (cellArray==NULL) {
         cellArray = [[NSMutableArray alloc]init];
     }
-    [cellArray insertObject:cellDictionary atIndex:cellNumber];
+    if ([cellArray count]==cellNumber) {
+        [cellArray addObject:cellDictionary];
+    }else{
+        [cellArray replaceObjectAtIndex:cellNumber withObject:cellDictionary];
+    }
     [mydefault setObject:cellArray forKey:@"CELLS"];
     [mydefault synchronize];
-    
-//    NSLog(@"始めcellArray=%@",[cellArray description]);
+//    NSLog(@"始めcellDictionary2=%@",[cellDictionary description]);
+//   NSLog(@"始めcellArray2=%@",[cellArray description]);
     
     [self performSegueWithIdentifier:@"viewToTableView" sender:self];
     

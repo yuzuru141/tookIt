@@ -187,6 +187,11 @@
 				TargetAttributes = {
 					FE9532B91AF83DF7006A409F = {
 						CreatedOnToolsVersion = 6.3.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					FE9532D21AF83DF7006A409F = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -440,6 +445,7 @@
 				FE9532DF1AF83DF7006A409F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FE9532E01AF83DF7006A409F /* Build configuration list for PBXNativeTarget "tookItTests" */ = {
 			isa = XCConfigurationList;
@@ -448,6 +454,7 @@
 				FE9532E21AF83DF7006A409F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

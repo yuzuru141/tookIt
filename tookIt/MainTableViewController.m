@@ -33,6 +33,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+//    [self connectionURL];
     [self firstLoad];
 
 }
@@ -150,6 +151,7 @@
 - (void)updateCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     // imageView
 //    cell.imageView.image = [UIImage imageNamed:@"no_image.png"];
+    //情報が見つかった時に表示する
     cell.imageView.image = [UIImage imageNamed:@"right.png"];
     // textLabel
     NSString *text = [dataSource objectAtIndex:(NSUInteger) indexPath.row];
@@ -197,17 +199,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 //    NSLog(@"「%@」が選択されました", [dataSource objectAtIndex:indexPath.row]);
-    cellNumber = indexPath.row;
+//    cellNumber = indexPath.row;
 //    NSLog(@"cellNumber=%d",cellNumber);
-    NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
-    [mydefault setInteger:cellNumber forKey:@"NUMBER"];
-    [mydefault synchronize];
-    
-    //セグエ移動メソッド不要
-//    [self performSegueWithIdentifier:@"tableViewToView" sender:self];
-    
-    // ハイライトを外す
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
+//    [mydefault setInteger:cellNumber forKey:@"NUMBER"];
+//    [mydefault synchronize];
+//    
+//    //セグエ移動メソッド不要
+////    [self performSegueWithIdentifier:@"tableViewToView" sender:self];
+//    
+//    // ハイライトを外す
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 
@@ -258,5 +260,50 @@
  */
 
 
+-(void)connectionURL{
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
+                                                          delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    
+    
+    NSURL *url = [NSURL URLWithString:@"http://www.jw.org"];
+    
+    NSURLSessionTask *task = [session dataTaskWithURL:url];
+    
+    
+    [task resume];
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
+{
+    NSString *string = [[NSString alloc] initWithData:data
+                                             encoding:NSUTF8StringEncoding];
+//    NSLog(@"HTML：%@",string);
+    [self searchWord:string label:@"JW"];
+    
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender//prepareForSegueメソッドを使って、ニュース記事のタイトルをタップして次の画面が表示されるようにする
+{
+    if ([[segue identifier] isEqualToString:@"tableViewToView"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        cellNumber = indexPath.row;
+        NSLog(@"cellNumber=%d",cellNumber);
+        NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
+        [mydefault setInteger:cellNumber forKey:@"NUMBER"];
+        [mydefault synchronize];
+        
+    }
+}
+
+
+-(void)searchWord:(NSString*)URL label:(NSString*)WORD{
+    
+    NSRange range = [URL rangeOfString:WORD];
+    if (range.location != NSNotFound) {
+        NSLog(@"発見");
+    } else {
+        NSLog(@"ない");
+    }
+}
 
 @end
