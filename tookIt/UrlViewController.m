@@ -18,6 +18,7 @@
     NSString *bodyString;
     UIButton *doneButton;
     UIButton *cancelButton;
+    UIButton *resetButton;
     NSMutableArray *cellArray;
     NSMutableDictionary *cellDictionary;
     NSInteger cellNumber;
@@ -68,21 +69,28 @@
     [textfieldURL becomeFirstResponder];
     [self.view addSubview:textfieldURL];
     
-    //ボタン キャンセルボタンとオールクリアボタンに分ける
     doneButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    doneButton.frame = CGRectMake(0,self.view.bounds.size.height-70,self.view.bounds.size.width,30);
-    [doneButton setTitle:@"set" forState:UIControlStateNormal];
-    doneButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    doneButton.frame = CGRectMake(self.view.bounds.size.width/5,self.view.bounds.size.height-50,100,30);
+    [doneButton setTitle:@"done" forState:UIControlStateNormal];
+    doneButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [doneButton addTarget:self
                    action:@selector(buttonDone) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:doneButton];
     
+    resetButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    resetButton.frame = CGRectMake(self.view.bounds.size.width/5*2,self.view.bounds.size.height-50,100,30);
+    [resetButton setTitle:@"reset All" forState:UIControlStateNormal];
+    resetButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    [resetButton addTarget:self
+                     action:@selector(buttonreset) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:resetButton];
+    
     cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    cancelButton.frame = CGRectMake(0,self.view.bounds.size.height-50,self.view.bounds.size.width,30);
+    cancelButton.frame = CGRectMake(self.view.bounds.size.width/5*3,self.view.bounds.size.height-50,100,30);
     [cancelButton setTitle:@"cancel" forState:UIControlStateNormal];
-    cancelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    cancelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [cancelButton addTarget:self
-                     action:@selector(buttonCancel) forControlEvents:UIControlEventTouchUpInside];
+                    action:@selector(buttonCancel) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelButton];
 }
 
@@ -96,7 +104,6 @@
     cellArray = [mydefault objectForKey:@"CELLS"];
 //    NSLog(@"(url)cellArray最初読み込み=%@",[cellArray description]);
 //    NSLog(@"(url)cellarray count=%d",[cellArray count]);
-    //ここの入力が終わった後に、tableViewのdidSelect1メソッドが呼ばれるため、cellNumberが一つ前になる
     if (!(cellArray==nil)) {
         if ([cellArray count]>cellNumber) {
             cellDictionary = [cellArray objectAtIndex:cellNumber];
@@ -244,12 +251,16 @@
 }
 
 //保存せずにページを戻る
-- (void)buttonCancel{
+- (void)buttonreset{
     [self performSegueWithIdentifier:@"viewToTableView" sender:self];
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
 }
 
+//保存せずにページを戻る
+- (void)buttonCancel{
+    [self performSegueWithIdentifier:@"viewToTableView" sender:self];
+}
 
 @end
 

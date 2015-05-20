@@ -287,7 +287,7 @@
     if ([[segue identifier] isEqualToString:@"tableViewToView"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         cellNumber = indexPath.row;
-        NSLog(@"cellNumber=%d",cellNumber);
+//        NSLog(@"cellNumber=%d",cellNumber);
         NSUserDefaults* mydefault = [NSUserDefaults standardUserDefaults];
         [mydefault setInteger:cellNumber forKey:@"NUMBER"];
         [mydefault synchronize];
